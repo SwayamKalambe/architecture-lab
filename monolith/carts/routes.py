@@ -56,8 +56,6 @@ def create_cart(payload: CreateCartItemRequest, db: Session=Depends(getdb)):
             )
 
 
-    
-
     db.add(cart_item)
     db.commit()
     db.refresh(cart_item)
@@ -67,3 +65,32 @@ def create_cart(payload: CreateCartItemRequest, db: Session=Depends(getdb)):
         "product_id": cart_item.product_id,
         "quantity": cart_item.quantity
     }
+
+
+@carts_router.get("/cart/{user_id}", response_model=List[CartItemResponse])
+def retrieve_cart(user_id: UUID, db: Session=Depends(getdb)):
+
+    user=db.query(User).filter(
+        User.user_id==user_id
+    ).first()
+
+    if not user:
+        raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="User not found"
+                )
+
+    cart=db.query(Cart).filter(
+        Cart.user_id==user_id,
+    ).first()
+
+    if not cart:
+            return []
+
+    cart_items=db.query(CartItem).filter(
+        CartItem.cart_id==cart.cart_id
+    ).all()
+
+    return cart_items
+
+
