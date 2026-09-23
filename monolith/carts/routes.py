@@ -16,7 +16,8 @@ def create_cart(payload: CreateCartItemRequest, db: Session=Depends(getdb)):
     # check if user exists
     user=db.query(User).filter(
         User.user_id==payload.user_id
-    )
+    ).first()
+    
     if not user:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
