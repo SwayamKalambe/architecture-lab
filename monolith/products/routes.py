@@ -14,7 +14,8 @@ def create_product(payload: CreateProductRequest, db: Session=Depends(getdb)):
     new_product=Product(
         product_name=payload.product_name,
         price=payload.price,
-        description=payload.description
+        description=payload.description,
+        quantity=payload.quantity
     )
     db.add(new_product)
     db.commit()
@@ -22,7 +23,9 @@ def create_product(payload: CreateProductRequest, db: Session=Depends(getdb)):
 
     return {
         "product_id": new_product.product_id,
-        "product_name": new_product.product_name
+        "product_name": new_product.product_name,
+        "description": new_product.description,
+        "quantity": new_product.quantity
     }
 
 

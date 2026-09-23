@@ -9,3 +9,4 @@ class Product(Base):
     product_name=Column(String(50), nullable=True)
     price=Column(String, nullable=False)
     description=Column(String, nullable=True)
+    quantity=Column(Integer, default=1)
