@@ -6,7 +6,7 @@ from sqlalchemy.dialects.postgresql import UUID
 class Cart(Base):
     __tablename__="carts"
     cart_id= Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    user_id= Column(UUID, ForeignKey("users.user_id"), unique=True, nullable=False)
+    user_id= Column(UUID(as_uuid=True), ForeignKey("users.user_id"), unique=True, nullable=False)
 
 class CartItem(Base):
     __tablename__="cart_items"
