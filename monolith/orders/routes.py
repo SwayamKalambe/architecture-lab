@@ -66,7 +66,7 @@ def create_order(payload: CreateOrderRequest, db: Session= Depends(getdb)):
 
         order_items_data.append({
             "product_id": product.product_id,
-            "product_name": product.name,
+            "product_name": product.product_name,
             "price": product.price,
             "quantity": item.quantity
         })
@@ -140,7 +140,7 @@ def get_order(order_id: UUID,db: Session = Depends(getdb)):
 
         items.append({
             "product_id": item.product_id,
-            "product_name": product.name,
+            "product_name": product.product_name,
             "price": item.price,
             "quantity": item.quantity
         })
@@ -203,7 +203,7 @@ def get_user_orders(user_id: UUID,db: Session = Depends(getdb)):
     for item in order_items:
         items_by_order.setdefault(item.order_id, []).append({
             "product_id": item.product_id,
-            "product_name": products_by_id[item.product_id].name,
+            "product_name": products_by_id[item.product_id].product_name,
             "price": item.price,
             "quantity": item.quantity
         })
