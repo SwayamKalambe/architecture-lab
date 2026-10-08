@@ -95,3 +95,46 @@ def retrieve_cart(user_id: UUID, db: Session=Depends(getdb)):
     return cart_items
 
 
+@carts_router.delete("/cart/{user_id}/items/{product_id}")
+def delete_cart_item(user_id: UUID,product_id: UUID,db: Session = Depends(getdb)):
+    # 1. Check user exists
+    user = db.query(User).filter(
+        User.user_id == user_id
+    ).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+
+    # 2. Find user's cart
+    cart = db.query(Cart).filter(
+        Cart.user_id == user_id
+    ).first()
+
+    if not cart:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Cart not found"
+        )
+
+    # 3. Find product in cart
+    cart_item = db.query(CartItem).filter(
+        CartItem.cart_id == cart.cart_id,
+        CartItem.product_id == product_id
+    ).first()
+
+    if not cart_item:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Product not found in cart"
+        )
+
+    # 4. Delete cart item
+    db.delete(cart_item)
+    db.commit()
+
+    return {
+        "message": "Product removed from cart"
+    }
