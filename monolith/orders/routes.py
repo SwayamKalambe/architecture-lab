@@ -221,3 +221,31 @@ def get_user_orders(user_id: UUID,db: Session = Depends(getdb)):
         )
 
     return result
+
+@orders_router.delete("/orders/{order_id}")
+def delete_order(order_id: UUID,db: Session = Depends(getdb)):
+    # 1. Find order
+    order = db.query(Orders).filter(
+        Orders.order_id == order_id
+    ).first()
+
+    if not order:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Order not found"
+        )
+
+    # 2. Delete order items
+    db.query(OrderItem).filter(
+        OrderItem.order_id == order_id
+    ).delete(synchronize_session=False)
+
+    # 3. Delete order
+    db.delete(order)
+
+    # 4. Commit
+    db.commit()
+
+    return {
+        "message": "Order deleted successfully"
+    }
