@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from monolith import (user_router,
                       products_router,
-                      carts_router
+                      carts_router,
+                      orders_router
                       )
 
 app = FastAPI(title="Architecture Lab")
@@ -9,6 +10,7 @@ app = FastAPI(title="Architecture Lab")
 app.include_router(user_router)
 app.include_router(products_router)
 app.include_router(carts_router)
+app.include_router(orders_router)
 
 
 @app.get("/")
