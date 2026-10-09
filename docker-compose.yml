@@ -1,0 +1,10 @@
+services:
+  api:
+    build: .
+    container_name: architecture-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@host.docker.internal:5432/${POSTGRES_DB}
