@@ -4,3 +4,6 @@ venv/
 alembic/__pycache__/
 alembic/versions/__pycache__/
 .DS_Store
+load_test.py
+backup.sql
+*.txt
